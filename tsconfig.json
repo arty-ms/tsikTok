@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./server",
+    "outDir": "./dist/",
+    "allowSyntheticDefaultImports": true,
+    "noEmit": false,
+    "types": ["node"],
+    "allowJs": true,
+    "target": "esnext",
+    "module": "commonjs",
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "inlineSources": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "strictBindCallApply": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": [
+      "es2017"
+    ]
+  },
+  "include": [
+    "server/**/*"
+  ],
+  "exclude": [
+    "./node_modules"
+  ]
+}
