@@ -1,19 +1,23 @@
 {
     "presets": [
-        [
-            "@babel/preset-env",
-            {
-                "corejs": "2",
-                "useBuiltIns": "entry"
+        ["@babel/preset-env", {
+            "targets": {
+                "browsers": ["last 2 versions", "ie >= 11"]
             }
-        ],
-        [
-            "@babel/preset-react"
-        ]
+        }],
+        "@babel/preset-react"
     ],
     "plugins": [
-        ["@babel/plugin-syntax-dynamic-import"],
-        ["@babel/plugin-transform-arrow-functions"],
+        "@babel/plugin-proposal-object-rest-spread",
+        "@babel/plugin-transform-runtime",
+        [
+            "@babel/plugin-proposal-decorators",
+            {
+                "legacy": true
+            }
+        ],
+        "@babel/plugin-syntax-dynamic-import",
+        "@babel/plugin-proposal-export-default-from",
         [
             "module-resolver",
             {
