@@ -1,6 +1,7 @@
 import React, {useRef, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {Button} from 'react-bootstrap';
+import { withRouter } from 'react-router-dom';
 
 import './styles.scss';
 
@@ -56,6 +57,7 @@ const VideoRecorder = (props) => {
     name,
     onVideoUploaded,
     onUploadingStateChange,
+    history
   } = props;
 
   const classes = useStyle();
@@ -114,21 +116,23 @@ const VideoRecorder = (props) => {
             px="16px"
             block
             disabled={!recordedData} onClick={() => {
-            videoJsRef.current.play();
+              history.push('/');
+              // videoJsRef.current.play();
           }}>
-            Загрузить
+            Опубликовать видео
           </Button>
           <Button
             width="lg"
             block
             disabled={!recordedData}
+            variant="warning"
             onClick={() => {
               videoJsRef.current.record().reset();
               videoJsRef.current.record().getDevice();
               setRecordedData(null);
             }}
           >
-            Перезаписать
+            Перезаписать видео
           </Button>
         </div>
       ) : (
@@ -136,11 +140,12 @@ const VideoRecorder = (props) => {
           <Button
             width="lg"
             block
+            variant="danger"
             onClick={() => {
               videoJsRef.current.record().stop();
               setIsRecording(false);
             }}>
-            Остановить
+            Остановить запись
           </Button>
         ) : (
           <Button
@@ -174,4 +179,4 @@ VideoRecorder.propTypes = {
   onUploadingStateChange: PropTypes.func,
 };
 
-export default VideoRecorder;
+export default withRouter(VideoRecorder);

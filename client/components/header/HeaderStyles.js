@@ -23,6 +23,6 @@ export default createUseStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     alignContent: 'center',
-    margin: '0 20px 0 0',
+    margin: '0',
   },
 }));
