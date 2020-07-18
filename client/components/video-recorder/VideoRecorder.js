@@ -99,7 +99,7 @@ const VideoRecorder = (props) => {
   }, []);
 
   return (
-    <div className="VideoRecorderWidget">
+    <div className={`VideoRecorderWidget ${recordedData ? '' : 'HasNoRecordedData'}`}>
       <div className="VideoPlayerWrapper">
       <video
         ref={videoRef}

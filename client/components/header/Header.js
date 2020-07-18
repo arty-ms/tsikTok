@@ -65,8 +65,8 @@ const Header = (props) => {
       <Card className={classes.card}>
         <div className="AppHeaderInner">
         {/*{getMenu(user, { t, isMobile, history })}*/}
-        <Link to="/">{t('APPLICATION_TITLE')}</Link>
-        <Button disabled={location.pathname === "/upload-video"} className="RecordButtonWrapper" onClick={() => {
+        <Link to="/" className="Logo"><span className="Cyk">CYK</span> <span className="Tok">TOK</span></Link>
+        <Button disabled={location.pathname === "/upload-video"} size="sm" className="RecordButtonWrapper" onClick={() => {
           history.push('/upload-video')
         }}>Записать своё видео</Button>
         </div>

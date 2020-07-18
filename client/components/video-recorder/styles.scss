@@ -6,6 +6,12 @@
   display: none !important;
 }
 
+.HasNoRecordedData {
+  .vjs-control-bar {
+    display: none !important;
+  }
+}
+
 .vjs-play-control.vjs-control.vjs-button {
   display: block !important;
   position: absolute;
