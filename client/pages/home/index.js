@@ -1,11 +1,14 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 const Home = () => {
-    return (
-        <div>
-            Welcome to "ЦикТок"
-        </div>
-    )
-}
+  const { t } = useTranslation();
 
-export default Home
+  return (
+    <div>
+      {t('WELCOME_PAGE_TITLE')}
+    </div>
+  );
+};
+
+export default Home;
