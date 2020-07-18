@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { withRouter } from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 
 import routes from '../../common/routes';
 
@@ -12,6 +12,7 @@ import AuthorizationContext from '../../contexts/AuthorizationContext';
 import MobileContext from '../../contexts/MobileContext';
 import UserMenu from '../user-menu/UserMenu';
 import { getClassName } from '../../utils/ClassUtils';
+import {Button} from "react-bootstrap";
 
 export const getMenuItems = (user) => {
   const isAdmin = user && user.roles.includes('admin');
@@ -60,8 +61,10 @@ const Header = (props) => {
   return (
     <header className={rootClasses}>
       <Card className={classes.card}>
-        {getMenu(user, { t, isMobile, history })}
+        {/*{getMenu(user, { t, isMobile, history })}*/}
+        {t('APPLICATION_TITLE')}
         <div className={classes.panels}>
+          <Link to="/upload-video"><Button>Записать своё видео</Button></Link>
           <UserMenu className={classes.userMenu}/>
         </div>
       </Card>
