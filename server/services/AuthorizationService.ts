@@ -11,13 +11,13 @@ import {
   VerificationInput,
 } from '../models/AuthorizationModel';
 import UserService from './UserService';
-import ServerError, { ErrorCode } from '../error-codes/ServerError';
+import { StatusCode, ServerError } from '../response';
 
 const {tokenSecret} = Config;
 
-@Service('AuthorizationService')
+@Service()
 export default class AuthorizationService {
-  @Inject('UserService')
+  @Inject(type => UserService)
   public userService: UserService;
 
   public async initiateSignUp(initiateSignUpData: InitiateSignUpInput): Promise<string> {
@@ -25,7 +25,7 @@ export default class AuthorizationService {
     const existingUser = await this.userService.getUser({ phone });
 
     if (existingUser) {
-      throw new ServerError('User with such phone already exist', ErrorCode.ALREADY_EXIST);
+      throw new ServerError('User with such phone already exist', StatusCode.ALREADY_EXIST);
     }
 
     const code = await this.generateCode();
@@ -43,11 +43,11 @@ export default class AuthorizationService {
     const user = await this.userService.getUser(userId);
 
     if (user.verificationToken !== verificationToken) {
-      throw new ServerError('Verification token is not valid', ErrorCode.NOT_VALID);
+      throw new ServerError('Verification token is not valid', StatusCode.NOT_VALID);
     }
 
     if (user.verificationCode !== code) {
-      throw new ServerError('Code is not valid', ErrorCode.NOT_VALID);
+      throw new ServerError('Code is not valid', StatusCode.NOT_VALID);
     }
 
     await this.userService.removeVerificationToken(userId);
@@ -88,19 +88,19 @@ export default class AuthorizationService {
       const isValidPassword = bcrypt.compareSync(password, user.password);
 
       if (!isValidPassword) {
-        throw new ServerError('phone or password is invalid', ErrorCode.NOT_VALID);
+        throw new ServerError('phone or password is invalid', StatusCode.NOT_VALID);
       }
 
       if (user.status === UserStatus.invited) {
-        throw new ServerError('Account is not yet activated', ErrorCode.NOT_VALID);
+        throw new ServerError('Account is not yet activated', StatusCode.NOT_VALID);
       }
 
       if (user.status === UserStatus.phoneConfirmed) {
-        throw new ServerError('Account is not yet activated', ErrorCode.NOT_VALID);
+        throw new ServerError('Account is not yet activated', StatusCode.NOT_VALID);
       }
 
       if (user.status === UserStatus.inactive) {
-        throw new ServerError('Account is inactive', ErrorCode.NOT_VALID);
+        throw new ServerError('Account is inactive', StatusCode.NOT_VALID);
       }
 
       const verificationToken = await this.regenerateToken(user.id);
@@ -108,7 +108,7 @@ export default class AuthorizationService {
       return this.authenticate(verificationToken);
     }
 
-    throw new ServerError('phone or password is invalid', ErrorCode.NOT_VALID);
+    throw new ServerError('phone or password is invalid', StatusCode.NOT_VALID);
   }
 
   public async regenerateToken(userId: number): Promise<string> {
@@ -123,7 +123,7 @@ export default class AuthorizationService {
     const user = await this.userService.getUser({ authorizationToken });
 
     if (!user) {
-      throw new ServerError('can\'t authorize with provided token', ErrorCode.NOT_VALID);
+      throw new ServerError('can\'t authorize with provided token', StatusCode.NOT_VALID);
     }
 
     return user;
@@ -139,7 +139,7 @@ export default class AuthorizationService {
     const user = await this.userService.getUser({ phone: resetPasswordWithPhoneData.phone });
 
     if (!user) {
-      throw new ServerError('User with such phone not found', ErrorCode.NOT_VALID);
+      throw new ServerError('User with such phone not found', StatusCode.NOT_VALID);
     }
 
     const code = await this.generateCode();
@@ -158,11 +158,11 @@ export default class AuthorizationService {
     const user = await this.userService.getUser(userId);
 
     if (user.verificationToken !== verificationToken) {
-      throw new ServerError('Verification token is not valid', ErrorCode.NOT_VALID);
+      throw new ServerError('Verification token is not valid', StatusCode.NOT_VALID);
     }
 
     if (user.verificationCode !== code) {
-      throw new ServerError('Code is not valid', ErrorCode.NOT_VALID);
+      throw new ServerError('Code is not valid', StatusCode.NOT_VALID);
     }
 
     await this.userService.removeVerificationToken(userId);
@@ -195,7 +195,7 @@ export default class AuthorizationService {
     const user = await this.userService.getUser(userId);
 
     if (!bcrypt.compareSync(oldPassword, user.password)) {
-      throw new ServerError('Old password is not valid', ErrorCode.NOT_VALID);
+      throw new ServerError('Old password is not valid', StatusCode.NOT_VALID);
     }
 
     await this.userService.updateUser({

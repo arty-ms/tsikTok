@@ -8,7 +8,7 @@ export default createUseStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     height: '55px',
-    padding: '5px',
+    padding: '10px',
   },
   basketPanel: {
     marginLeft: '20px',

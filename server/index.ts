@@ -14,6 +14,7 @@ import Logger from './services/Logger';
 import { UserRole } from './models/UserModel';
 import UserService from './services/UserService';
 
+Container.set('config', settings);
 const logger: Logger = Container.get('Logger');
 
 const currentConfiguration = process.env.ENVIRONMENT || 'development';
@@ -34,7 +35,11 @@ export class ApplicationServer {
     this.logger = logger;
     this.app = createExpressServer({
       controllers,
-      authorizationChecker: async (action: Action, roles: UserRole[]) => {
+      cors: {
+        credentials: true,
+        origin: settings.allowedClientOrigins,
+      },
+      authorizationChecker: async (action: Action, roles: UserRole[] = []) => {
         const token = action.request.headers["authorizationToken"];
         const user = await this.userService.getUserByToken(token);
 
@@ -64,14 +69,7 @@ export class ApplicationServer {
   }
 
   public registerCors() {
-    this.app.use(cors((req, callback: (err: Error | null, options?: CorsOptions) => void) => {
-      const currentClientOrigin = req.header('origin');
-      const origin = (settings.allowedClientOrigins || []).find((allowedOrigin: string) => {
-        return allowedOrigin === currentClientOrigin;
-      });
 
-      callback(null, { origin, credentials: true });
-    }));
   }
 
   registerStatic() {
