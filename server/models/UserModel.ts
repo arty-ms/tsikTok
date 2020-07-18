@@ -1,5 +1,6 @@
 import {
-  Column, CreateDateColumn,
+  Column,
+  CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -102,7 +103,7 @@ export class User {
   @Column({ nullable: true })
   public email: string;
 
-  @Column()
+  @Column({nullable: true})
   public phone: string;
 
   @Column({ type: 'jsonb', default: DefaultUserContacts })
