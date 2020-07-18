@@ -3,7 +3,7 @@ import { Config } from 'types';
 const defaultConfig: Config = {
   allowedClientOrigins: [],
   databaseUrl: process.env.DATABASE_URL as string || '',
-  databaseUrlSSL: process.env.databaseUrlSSL === 'true' || false,
+  databaseUrlSSL: false,
   port: 3000,
   tokenSecret: 'tokenSecret',
   //Cloudinary config
