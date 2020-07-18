@@ -59,11 +59,11 @@ export default class PublicationController extends BaseController {
     }
   }
 
-  @Post('/api/publication/create')
-  public async createPublication(@Body() body: any, @CurrentUser() user: User, @Res() res: Response) {
+  @Post('/api/publication')
+  public async createPublication(@Body() body: any, @Res() res: Response) {
     try {
       const {
-        videoUrl,
+        videoId,
         selectedCandidateId,
       } = body;
 
@@ -71,12 +71,12 @@ export default class PublicationController extends BaseController {
       //   return this.sendErrorResponse(res, new ResponseWithStatusCode({ statusCode: StatusCode.UNAUTHORIZED }));
       // }
 
-      const video = await this.videoService.getVideo(videoUrl);
-      const createdPublication = await this.publicationService.createPublication(user.id, selectedCandidateId, video);
+      const video = await this.videoService.getVideo(videoId);
+      const createdPublication = await this.publicationService.createPublication(1, selectedCandidateId, video);
 
       return this.sendSuccessResponse(res, new ResponseWithStatusCode({ data: createdPublication }));
     } catch (error) {
-      const message = `[PublicationController.createPublication] error while creating publication, (err) => ${error.message}`;
+      const message = `[PublicationController.createPublication] error while creating publication, (err) => ${JSON.stringify(error)}`;
 
       return this.handleError(res, message);
     }

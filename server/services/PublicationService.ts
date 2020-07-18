@@ -22,6 +22,7 @@ export default class PublicationService {
       selectedCandidate: {
         id: selectedCandidateId,
       },
+      videoId: uploadedVideo.id,
       videoUrl: uploadedVideo.videoUrl,
       videoWidth: uploadedVideo.width,
       videoHeight: uploadedVideo.height,

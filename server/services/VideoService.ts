@@ -27,13 +27,10 @@ export default class VideoService {
     this.cloudinary = cloudinary.v2;
   }
 
-  public async getVideo(videoUrl: string): Promise<UploadedVideo> {
-    const result = await this.cloudinary
-      .search
-      .expression(`resource_type:video AND public_id=${this.config.cloudinaryFolder} AND secure_url=${videoUrl}`)
-      .max_results(1)
-      .execute();
-    const video = _.get(result, '0');
+  public async getVideo(publicId: string): Promise<UploadedVideo> {
+    const video = await this.cloudinary.api.resource(publicId, {
+      resource_type: 'video',
+    });
 
     return {
       id: video.public_id,
@@ -50,8 +47,7 @@ export default class VideoService {
     return new Promise((resolve, reject) => {
       const cloudinaryStream = this.cloudinary.uploader.upload_stream({
         resource_type: 'video',
-        public_id: this.config.cloudinaryFolder,
-        overwrite: true,
+        public_id: file.name,
       }, (error, result) => {
         if (error) {
           return reject(error);

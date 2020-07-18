@@ -2,13 +2,11 @@ import {Inject} from 'typedi';
 import { Response } from 'express';
 import {
   Controller,
-  CurrentUser,
   Post,
   Res,
   UploadedFile,
 } from 'routing-controllers';
 import VideoService from '../services/VideoService';
-import { User } from '../models/UserModel';
 import BaseController from './BaseController';
 import { ResponseWithStatusCode } from '../response';
 
@@ -18,15 +16,11 @@ export default class VideoController extends BaseController {
   public videoService: VideoService;
 
   @Post('/api/video')
-  public async uploadVideo(@UploadedFile('file') file: any, @Res() res: Response, @CurrentUser() user: User) {
+  public async uploadVideo(@UploadedFile('file') file: any, @Res() res: Response) {
     try {
-      // if (!user) {
-      //   return this.sendErrorResponse(res, new ResponseWithStatusCode({ statusCode: StatusCode.UNAUTHORIZED }));
-      // }
-
       const uploadedVideoData = await this.videoService.uploadVideo(file);
 
-      return this.sendSuccessResponse(res, new ResponseWithStatusCode({ data: uploadedVideoData.videoUrl }));
+      return this.sendSuccessResponse(res, new ResponseWithStatusCode({ data: uploadedVideoData }));
     } catch (error) {
       const message = `[VideoController.uploadVideo] error while uploading video, (err) => ${error.message}`;
 
