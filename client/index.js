@@ -12,6 +12,7 @@ import { AppWithModalDialog } from './contexts/ModalDialogContext';
 import Application from './application';
 import './common/icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './styles.scss';
 
 ReactDOM.render(
   <BrowserRouter>

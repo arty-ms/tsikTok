@@ -2,7 +2,6 @@ import settings from '../config/settings';
 
 export class HttpService {
   constructor(settings) {
-    debugger
     this.backendUrl = settings.BackendUrl;
     this.options = {};
   }
