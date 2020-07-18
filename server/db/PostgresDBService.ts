@@ -19,10 +19,7 @@ export default class PostgresDBConnector implements DatabaseConnectorInterface {
       url: this.settings.databaseUrl,
       entities,
       extra: {
-        ssl: {
-          require: this.settings.databaseUrlSSL,
-          rejectUnauthorized: false,
-        },
+        ssl: false,
         timezone: 'utc'
       },
       synchronize: true,
