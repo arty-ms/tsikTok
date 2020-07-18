@@ -1,6 +1,6 @@
 export default {
   MobileResolutionWidth: 1023,
-  BackendUrl: '',
+  BackendUrl: 'http://localhost:3000',
   WebsocketUrl: '',
   DefaultLocal: 'ru',
   FallbackLocal: 'ru',

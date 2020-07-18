@@ -1,8 +1,10 @@
 import bodyParser from 'body-parser';
-import { Application } from 'express';
+import express, { Application } from 'express';
 import cookieParser from 'cookie-parser';
+import cors, { CorsOptions } from 'cors';
 import 'reflect-metadata';
 import { Container } from 'typedi';
+import path from 'path';
 import { Action, createExpressServer, useContainer } from 'routing-controllers';
 
 import settings from './config/settings';
@@ -32,17 +34,6 @@ export class ApplicationServer {
     this.logger = logger;
     this.app = createExpressServer({
       controllers,
-      cors: {
-        origin: (origin, callback) => {
-          if (settings.allowedClientOrigins.indexOf(origin) !== -1) {
-            callback(null, true)
-          } else {
-            callback(new Error('Not allowed by CORS'))
-          }
-        },
-        credentials: true,
-        methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-      },
       authorizationChecker: async (action: Action, roles: UserRole[]) => {
         const token = action.request.headers["authorizationToken"];
         const user = await this.userService.getUserByToken(token);
@@ -67,7 +58,25 @@ export class ApplicationServer {
 
   public async start() {
     this.registerBodyParsers();
+    this.registerCors();
+    this.registerStatic();
     this.run()
+  }
+
+  public registerCors() {
+    this.app.use(cors((req, callback: (err: Error | null, options?: CorsOptions) => void) => {
+      const currentClientOrigin = req.header('origin');
+      const origin = (settings.allowedClientOrigins || []).find((allowedOrigin: string) => {
+        return allowedOrigin === currentClientOrigin;
+      });
+
+      callback(null, { origin, credentials: true });
+    }));
+  }
+
+  registerStatic() {
+    this.app.use(express.static(path.join(__dirname, '../dist')));
+    this.app.get('/*', (req, res) => res.sendFile(path.join(__dirname, '../dist/index.html')));
   }
 
   public registerBodyParsers() {
@@ -91,7 +100,6 @@ dBConnector.connect().then(async (connection) => {
 
     Container.set('EntityManager', dBConnector.entityManager);
     Container.set('QueryRunner', connection.createQueryRunner());
-    // Container.set('RedisClient', RedisClient);
 
     const userService: UserService = Container.get(UserService);
     const server = new ApplicationServer(userService);
