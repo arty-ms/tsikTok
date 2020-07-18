@@ -1,0 +1,46 @@
+version: '3.7'
+
+services:
+  server:
+    image: tsiktok:latest
+    container_name: tsiktok
+    env_file:
+      - ./.env
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    command: >
+      /bin/bash wait-for-postgres.sh
+
+  postgres:
+    image: postgres:11.2-alpine
+    container_name: postgres
+    env_file:
+      - ./.env
+    restart: unless-stopped
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      app-network:
+        aliases:
+          - postgres
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  dbdata:

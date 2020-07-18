@@ -6,7 +6,7 @@ import {
   Res,
   UploadedFile,
 } from 'routing-controllers';
-import Logger from "../services/logger";
+import Logger from "../services/Logger";
 import VideoService from '../services/VideoService';
 
 @Controller()

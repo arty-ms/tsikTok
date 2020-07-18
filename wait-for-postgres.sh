@@ -1,5 +1,5 @@
 function connect_to_potgres() {
-  node dist/bin/checkPostgresIsReady.js
+  node ./bin/checkPostgresIsReady.js
   postgres_ready=$?
 }
 
@@ -10,5 +10,4 @@ while : ; do
   [[ $postgres_ready == 1 ]] || break;
 done
 
-npm run migrate;
-npm run server;
+npm run start;

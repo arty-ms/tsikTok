@@ -1,10 +1,10 @@
 import { Config } from 'constants/types';
 
 const defaultConfig: Config = {
-  allowedClientOrigins: ['*'],
+  allowedClientOrigins: [],
   databaseUrl: process.env.DATABASE_URL as string || '',
   databaseUrlSSL: Boolean(process.env.databaseUrlSSL) || false,
-  port: 9000,
+  port: 3000,
   tokenSecret: 'tokenSecret',
 };
 
