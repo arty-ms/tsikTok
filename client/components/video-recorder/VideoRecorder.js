@@ -1,6 +1,6 @@
-import React, {useRef, useEffect, useState} from 'react';
+import React, { useRef, useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
-import {Button} from 'react-bootstrap';
+import { Button, Spinner } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 
 import './styles.scss';
@@ -26,7 +26,7 @@ import 'videojs-record/dist/plugins/videojs.record.ts-ebml.js';
 
 import useStyle from './VideoRecorderStyle';
 import {getClassName} from '../../utils/ClassUtils';
-import VideoAPI from '../../APIs/VideoAPI';
+import LoadingContext from '../../contexts/LoadingContext';
 
 import { useAlert } from 'react-alert'
 
@@ -58,9 +58,13 @@ const VideoRecorder = (props) => {
     className,
     name,
     onVideoUploaded,
+    onVideoPublish,
     onUploadingStateChange,
     history
   } = props;
+
+  const { isLoading } = useContext(LoadingContext);
+  const isVideoPublishing = isLoading('publishVideo');
 
   const classes = useStyle();
   const videoPlayerClasses = getClassName([
@@ -92,12 +96,6 @@ const VideoRecorder = (props) => {
 
       setRecordedData(videoJsRef.current.recordedData);
 
-      // const videoUrl = await VideoAPI.uploadVideo(player.recordedData);
-      //
-      // if (videoUrl) {
-      //   onVideoUploaded(videoUrl);
-      // }
-
       onUploadingStateChange(false);
     });
   }, []);
@@ -119,12 +117,11 @@ const VideoRecorder = (props) => {
             width="lg"
             px="16px"
             block
-            disabled={!recordedData} onClick={() => {
-              history.push('/');
-              alert.success('Ваше видео загружено. Оно сейчас находится в обработке и скоро будет добавлено :)');
-              // videoJsRef.current.play();
-          }}>
+            disabled={!recordedData}
+            onClick={() => onVideoPublish(recordedData)}
+          >
             Опубликовать видео
+            { isVideoPublishing && <Spinner animation="border" role="status"/> }
           </Button>
           <Button
             width="lg"
@@ -171,16 +168,16 @@ const VideoRecorder = (props) => {
 VideoRecorder.defaultProps = {
   className: '',
   name: '',
-  onVideoUploaded: () => {
-  },
-  onUploadingStateChange: () => {
-  },
+  onVideoUploaded: () => {},
+  onVideoPublish: () => {},
+  onUploadingStateChange: () => {},
 };
 
 VideoRecorder.propTypes = {
   className: PropTypes.string,
   name: PropTypes.string,
   onVideoUploaded: PropTypes.func,
+  onVideoPublish: PropTypes.func,
   onUploadingStateChange: PropTypes.func,
 };
 

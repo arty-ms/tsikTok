@@ -54,7 +54,7 @@ export default class PublicationService {
           INNER JOIN users "user" ON publication."userId" = "user"."id"
           INNER JOIN candidates "candidate" ON publication."selectedCandidateId" = "candidate"."id"
         GROUP BY publication.id, candidate.id, "user".id, publication."createdAt"
-        ORDER BY publication."createdAt"
+        ORDER BY publication."createdAt" DESC
       )
       SELECT *
         FROM (
