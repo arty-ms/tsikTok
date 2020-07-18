@@ -4,7 +4,7 @@ const defaultConfig: Config = {
   port: 3000,
   allowedClientOrigins: ['http://localhost:8080'],
   databaseUrl: process.env.DATABASE_URL,
-  databaseUrlSSL: Boolean(process.env.databaseUrlSSL) || false,
+  databaseUrlSSL: process.env.databaseUrlSSL === 'true' || false,
   tokenSecret: 'tokenSecret',
   //Cloudinary config
   cloudinaryCloudName: 'dddorgysu',
