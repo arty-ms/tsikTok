@@ -3,7 +3,7 @@ import { Config } from 'types';
 const LocalConfig: Config = {
   allowedClientOrigins: ['http://localhost:8080'],
   databaseUrl: process.env.DATABASE_URL as string | '',
-  databaseUrlSSL: Boolean(process.env.databaseUrlSSL) || false,
+  databaseUrlSSL: process.env.databaseUrlSSL === 'true' || false,
   port: 3000,
   tokenSecret: 'tokenSecret',
   //Cloudinary config

@@ -1,3 +1,3 @@
 export default {
-  BackendUrl: `http://${location.hostname}:3000`
+  BackendUrl: `https://${location.hostname}:3000`
 };

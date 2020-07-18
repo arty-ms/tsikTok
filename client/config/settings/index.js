@@ -23,6 +23,8 @@ export const getGlobalSettings = environment =>
     return currentSettings;
   }, {});
 
+export const ENVIRONMENT = process.env.NODE_ENV;
+
 export const EnvironmentSettings = getEnvironmentSettings(ENVIRONMENT);
 export const GlobalSettings = getGlobalSettings(process.env);
 export const ResultSettings = merge(

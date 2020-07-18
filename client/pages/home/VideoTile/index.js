@@ -1,8 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 import './styles.scss';
 import tick from '../../../assets/images/tick.png';
+import { getFormattedDateWithoutTime } from '../../../utils/DateUtils';
 
-const VideoTile = ({isVisible}) => {
+const VideoTile = ({ isVisible, publication }) => {
   const videoElement = useRef(null);
 
   useEffect(() => {
@@ -16,12 +17,15 @@ const VideoTile = ({isVisible}) => {
   return (
     <div className="VideoElement">
       <div className="Details">
-        <span className="UpperCase">Anatoly Semenyaka</span>
-        <small>12.10.2020</small>
+        <span className="UpperCase">{publication.user.firstName} {publication.user.lastName}</span>
+        <small>{getFormattedDateWithoutTime(publication.createdAt)}</small>
         <span className="UpperCase">City</span>
       </div>
-      <video ref={videoElement} src="https://dl5.webmfiles.org/big-buck-bunny_trailer.webm" poster="https://i.pinimg.com/564x/cd/65/02/cd6502e619912e69a40d032478fd0b44.jpg" controls />
-        <div className="SelectedCandidate UpperCase"><span>ЗА ТИХАНОВСКУЮ</span> <img src={tick} className="Tick" alt="tick"/></div>
+      <video ref={videoElement}
+             src={publication.videoUrl}
+             controls
+      />
+        <div className="SelectedCandidate UpperCase"><span>ЗА ${publication.selectedCandidate.fullName}</span> <img src={tick} className="Tick" alt="tick"/></div>
     </div>
   );
 };
