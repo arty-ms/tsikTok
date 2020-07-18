@@ -1,5 +1,9 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
+import {Button} from 'react-bootstrap';
+import { withRouter } from 'react-router-dom';
+
+import './styles.scss';
 
 // Please do not remove imports which is not used. Seems like video.js needs it internally
 
@@ -21,7 +25,7 @@ import 'videojs-record/dist/plugins/videojs.record.webm-wasm.js';
 import 'videojs-record/dist/plugins/videojs.record.ts-ebml.js';
 
 import useStyle from './VideoRecorderStyle';
-import { getClassName } from '../../utils/ClassUtils';
+import {getClassName} from '../../utils/ClassUtils';
 import VideoAPI from '../../APIs/VideoAPI';
 
 const options = {
@@ -53,55 +57,108 @@ const VideoRecorder = (props) => {
     name,
     onVideoUploaded,
     onUploadingStateChange,
+    history
   } = props;
 
   const classes = useStyle();
-  const rootClasses = getClassName([
-    classes.root,
-    className,
-  ]);
   const videoPlayerClasses = getClassName([
     classes.video,
     'video-js',
     'vjs-default-skin',
+    'my-video-js'
   ]);
 
   const videoRef = useRef(null);
 
-  const [playerInstance, setPlayerInstance] = useState(null);
+  const videoJsRef = useRef(null);
+
+  const [recordedData, setRecordedData] = useState(null);
+
+  const [isRecording, setIsRecording] = useState(null);
 
   useEffect(() => {
-    const player = videojs(videoRef.current, options);
+    videoJsRef.current = videojs(videoRef.current, options);
 
-    player.on('deviceError', function() {
-      console.warn('device error:', player.deviceErrorCode);
-    });
+    videoJsRef.current.record().getDevice();
 
-    player.on('error', (element, error) => console.error(error));
+    videoJsRef.current.on('error', (element, error) => console.error(error));
 
-    player.on('finishRecord', async () => {
+    videoJsRef.current.on('finishRecord', async () => {
       onUploadingStateChange(true);
 
-      const videoUrl = await VideoAPI.uploadVideo(player.recordedData);
+      setRecordedData(videoJsRef.current.recordedData);
 
-      if (videoUrl) {
-        onVideoUploaded(videoUrl);
-      }
+      // const videoUrl = await VideoAPI.uploadVideo(player.recordedData);
+      //
+      // if (videoUrl) {
+      //   onVideoUploaded(videoUrl);
+      // }
 
       onUploadingStateChange(false);
     });
-
-    setPlayerInstance(player);
   }, []);
 
   return (
-    <div className={rootClasses}>
+    <div className="VideoRecorderWidget">
+      <div className="VideoPlayerWrapper">
       <video
         ref={videoRef}
         playsinline
         className={videoPlayerClasses}
       >
       </video>
+      </div>
+      <div className="ButtonWrapper">
+      {recordedData ? (
+        <div>
+          <Button
+            width="lg"
+            px="16px"
+            block
+            disabled={!recordedData} onClick={() => {
+              history.push('/');
+              // videoJsRef.current.play();
+          }}>
+            Опубликовать видео
+          </Button>
+          <Button
+            width="lg"
+            block
+            disabled={!recordedData}
+            variant="warning"
+            onClick={() => {
+              videoJsRef.current.record().reset();
+              videoJsRef.current.record().getDevice();
+              setRecordedData(null);
+            }}
+          >
+            Перезаписать видео
+          </Button>
+        </div>
+      ) : (
+        isRecording ? (
+          <Button
+            width="lg"
+            block
+            variant="danger"
+            onClick={() => {
+              videoJsRef.current.record().stop();
+              setIsRecording(false);
+            }}>
+            Остановить запись
+          </Button>
+        ) : (
+          <Button
+            width="lg"
+            block
+            onClick={() => {
+              videoJsRef.current.record().start();
+              setIsRecording(true);
+            }}>
+            Начать запись
+          </Button>)
+      )}
+      </div>
     </div>
   );
 };
@@ -109,8 +166,10 @@ const VideoRecorder = (props) => {
 VideoRecorder.defaultProps = {
   className: '',
   name: '',
-  onVideoUploaded: () => {},
-  onUploadingStateChange: () => {},
+  onVideoUploaded: () => {
+  },
+  onUploadingStateChange: () => {
+  },
 };
 
 VideoRecorder.propTypes = {
@@ -120,4 +179,4 @@ VideoRecorder.propTypes = {
   onUploadingStateChange: PropTypes.func,
 };
 
-export default VideoRecorder;
+export default withRouter(VideoRecorder);

@@ -1,8 +1,5 @@
-.PageGrid {
-  background-color: red;
-
-  .VideoTile {
-    background-color: aquamarine;
-    height: 100px;
-  }
+.Page {
+  max-width: 1140px;
+  margin-left: auto;
+  margin-right: auto;
 }
