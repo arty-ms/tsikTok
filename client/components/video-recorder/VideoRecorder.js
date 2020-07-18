@@ -28,6 +28,8 @@ import useStyle from './VideoRecorderStyle';
 import {getClassName} from '../../utils/ClassUtils';
 import LoadingContext from '../../contexts/LoadingContext';
 
+import { useAlert } from 'react-alert'
+
 const options = {
   controls: true,
   width: 320,
@@ -79,6 +81,8 @@ const VideoRecorder = (props) => {
   const [recordedData, setRecordedData] = useState(null);
 
   const [isRecording, setIsRecording] = useState(null);
+
+  const alert = useAlert()
 
   useEffect(() => {
     videoJsRef.current = videojs(videoRef.current, options);
