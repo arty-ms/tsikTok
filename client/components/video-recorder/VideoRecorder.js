@@ -28,6 +28,8 @@ import useStyle from './VideoRecorderStyle';
 import {getClassName} from '../../utils/ClassUtils';
 import VideoAPI from '../../APIs/VideoAPI';
 
+import { useAlert } from 'react-alert'
+
 const options = {
   controls: true,
   width: 320,
@@ -76,6 +78,8 @@ const VideoRecorder = (props) => {
 
   const [isRecording, setIsRecording] = useState(null);
 
+  const alert = useAlert()
+
   useEffect(() => {
     videoJsRef.current = videojs(videoRef.current, options);
 
@@ -117,6 +121,7 @@ const VideoRecorder = (props) => {
             block
             disabled={!recordedData} onClick={() => {
               history.push('/');
+              alert.show('Ваше видео загружено. Оно сейчас находится в обработке и скоро будет добавлено :)');
               // videoJsRef.current.play();
           }}>
             Опубликовать видео
