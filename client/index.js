@@ -11,6 +11,7 @@ import { NotificationApp } from './contexts/NotificationContext';
 import { AppWithModalDialog } from './contexts/ModalDialogContext';
 import Application from './application';
 import './common/icons';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 ReactDOM.render(
   <BrowserRouter>
