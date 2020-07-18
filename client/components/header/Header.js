@@ -1,9 +1,11 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import {Link, withRouter} from 'react-router-dom';
+import {Link, withRouter, useLocation} from 'react-router-dom';
 
 import routes from '../../common/routes';
+
+import './styles.scss';
 
 import useStyles from './HeaderStyles';
 import Card from '../common/card';
@@ -59,13 +61,14 @@ const Header = (props) => {
   ]);
 
   return (
-    <header className={rootClasses}>
+    <header>
       <Card className={classes.card}>
+        <div className="AppHeaderInner">
         {/*{getMenu(user, { t, isMobile, history })}*/}
-        {t('APPLICATION_TITLE')}
-        <div className={classes.panels}>
-          <Link to="/upload-video"><Button>Записать своё видео</Button></Link>
-          <UserMenu className={classes.userMenu}/>
+        <Link to="/">{t('APPLICATION_TITLE')}</Link>
+        <Button disabled={location.pathname === "/upload-video"} className="RecordButtonWrapper" onClick={() => {
+          history.push('/upload-video')
+        }}>Записать своё видео</Button>
         </div>
       </Card>
     </header>
