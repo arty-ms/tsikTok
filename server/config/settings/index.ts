@@ -1,4 +1,4 @@
-import { Config } from 'constants/types';
+import { Config } from 'types';
 
 import DefaultSettings from './default';
 import LocalSettings from './local';

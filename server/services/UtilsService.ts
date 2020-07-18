@@ -1,8 +1,9 @@
+import _ from 'lodash';
 import { Service } from 'typedi';
 
-@Service('UtilsService')
+@Service()
 export default class UtilsService {
-  handlePaginationResult(result: any[]) {
+  public handlePaginationResult(result: any[]) {
     const isEmpty = result.length === 0
       || result[result.length - 1].totalCount === '0'
       || result[0].id === null;
@@ -14,9 +15,11 @@ export default class UtilsService {
       };
     }
 
+    const totalCount = _.get(result, `${result.length - 1}.totalCount`, 0);
+
     return {
       result,
-      totalCount: result[result.length - 1].totalCount,
+      totalCount,
     };
   }
 }
