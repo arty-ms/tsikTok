@@ -121,7 +121,7 @@ const VideoRecorder = (props) => {
             block
             disabled={!recordedData} onClick={() => {
               history.push('/');
-              alert.show('Ваше видео загружено. Оно сейчас находится в обработке и скоро будет добавлено :)');
+              alert.success('Ваше видео загружено. Оно сейчас находится в обработке и скоро будет добавлено :)');
               // videoJsRef.current.play();
           }}>
             Опубликовать видео
