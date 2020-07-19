@@ -83,8 +83,8 @@ export class ApplicationServer {
     console.log(currentConfiguration)
     if (currentConfiguration === 'production') {
       const httpsConfig = {
-        key: fs.readFileSync(path.resolve(process.cwd(), '../apache-selfsigned.key'), 'utf8').toString(),
-        cert: fs.readFileSync(path.resolve(process.cwd(), '../apache-selfsigned.crt'), 'utf8').toString()
+        key: fs.readFileSync(path.resolve(__dirname, '../apache-selfsigned.key'), 'utf8').toString(),
+        cert: fs.readFileSync(path.resolve(__dirname, '../apache-selfsigned.crt'), 'utf8').toString()
       };
 
       const httpsServer = https.createServer(httpsConfig, this.app);

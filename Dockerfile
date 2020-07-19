@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 
 COPY ./ ./
 
-RUN apk update; apk add curl; apk add --no-cache bash; npm install;cd public;mkdir images;
+RUN apk update; apk add curl; apk add --no-cache bash; npm install;
 
 RUN npm run build
 
