@@ -1,10 +1,11 @@
 import bodyParser from 'body-parser';
 import express, { Application } from 'express';
 import cookieParser from 'cookie-parser';
-import cors, { CorsOptions } from 'cors';
+import * as https from 'https';
 import 'reflect-metadata';
 import { Container } from 'typedi';
 import path from 'path';
+import fs from 'fs'
 import { Action, createExpressServer, useContainer } from 'routing-controllers';
 
 import settings from './config/settings';
@@ -63,13 +64,8 @@ export class ApplicationServer {
 
   public async start() {
     this.registerBodyParsers();
-    this.registerCors();
     this.registerStatic();
     this.run()
-  }
-
-  public registerCors() {
-
   }
 
   registerStatic() {
@@ -84,9 +80,20 @@ export class ApplicationServer {
   }
 
   public async run() {
-     await this.app.listen(port);
+    console.log(currentConfiguration)
+    if (currentConfiguration === 'production') {
+      const httpsConfig = {
+        key: fs.readFileSync(path.resolve(process.cwd(), '../apache-selfsigned.key'), 'utf8').toString(),
+        cert: fs.readFileSync(path.resolve(process.cwd(), '../apache-selfsigned.crt'), 'utf8').toString()
+      };
 
-     this.logger.info(`Server running on port: ${port}`);
+      const httpsServer = https.createServer(httpsConfig, this.app);
+      httpsServer.listen(port);
+    } else {
+      this.app.listen(port)
+    }
+
+    this.logger.info(`Server running on port: ${port}`);
   }
 }
 

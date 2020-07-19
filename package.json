@@ -7,6 +7,7 @@
     "server": "nodemon -e ts --exec \"npm run start\"",
     "build": "webpack --display-error-details --config webpack.prod.js",
     "start": "tsc && cross-env NODE_PATH=dist/ node -r dotenv/config ./dist/index.js",
+    "start:prod": "tsc && cross-env NODE_PATH=dist/ ENVIRONMENT=production node -r dotenv/config ./dist/index.js",
     "client": "webpack-dev-server --open --config webpack.dev.js",
     "debug:build": "ENVIRONMENT=local tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
