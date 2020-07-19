@@ -10,4 +10,4 @@ while : ; do
   [[ $postgres_ready == 1 ]] || break;
 done
 
-npm run start;
+npm run start:prod;
