@@ -80,20 +80,9 @@ export class ApplicationServer {
   }
 
   public async run() {
-    console.log(currentConfiguration)
-    if (currentConfiguration === 'production') {
-      const httpsConfig = {
-        key: fs.readFileSync(path.resolve(__dirname, '../apache-selfsigned.key'), 'utf8').toString(),
-        cert: fs.readFileSync(path.resolve(__dirname, '../apache-selfsigned.crt'), 'utf8').toString()
-      };
+     await this.app.listen(port);
 
-      const httpsServer = https.createServer(httpsConfig, this.app);
-      httpsServer.listen(port);
-    } else {
-      this.app.listen(port)
-    }
-
-    this.logger.info(`Server running on port: ${port}`);
+     this.logger.info(`Server running on port: ${port}`);
   }
 }
 
